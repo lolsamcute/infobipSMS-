@@ -20,7 +20,7 @@ class MessageController extends Controller
 
         $location = 'uploads'; //Created an "uploads" folder for that
         // This is th location path of the message.csv file
-        if ($filepath = public_path($location . "/" . "message.csv") {
+        if ($filepath = public_path($location . "/" . "message.csv")) {
 
         // Reading file
         $file = fopen($filepath, "r");
