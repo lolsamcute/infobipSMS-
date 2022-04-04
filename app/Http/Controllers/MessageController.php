@@ -24,7 +24,20 @@ class MessageController extends Controller
 
         // Reading file
         $file = fopen($filepath, "r");
-        $importData_arr = array(); // Read through the file and store the contents as an array
+       // $importData_arr = array();
+        $importData_arr = [
+            ['infosms','8109844175','',''],
+            ['infosms','8109844175','',''],
+            ['infosms','8109844175','',''],
+            ['infosms','8109844175','',''],
+            ['infosms','8109844175','',''],
+            ['infosms','8109844175','',''],
+            ['infosms','8109844175','',''],
+            ['infosms','8109844175','',''],
+            ['infosms','8109844175','',''],
+            ['infosms','8109844175','',''],
+        ]; // Read through the file and store the contents as an array
+
         $i = 0;
         //Read the contents of the uploaded file
         while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
@@ -36,6 +49,8 @@ class MessageController extends Controller
         }
         for ($c = 0; $c < $num; $c++) {
         $importData_arr[$i][] = $filedata[$c];
+        $importData_arr[$i][2] = Str::uuid();
+
         }
         $i++;
         }
@@ -45,23 +60,7 @@ class MessageController extends Controller
         $name = $importData[1]; //Get user names
         $email = $importData[3]; //Get the user emails
         $j++;
-        try {
-        DB::beginTransaction();
-        Player::create([
-        'name' => $importData[1],
-        'club' => $importData[2],
-        'email' => $importData[3],
-        'position' => $importData[4],
-        'age' => $importData[5],
-        'salary' => $importData[6]
-        ]);
-        //Send Email
-        $this->sendEmail($email, $name);
-        DB::commit();
-        } catch (\Exception $e) {
-        //throw $th;
-        DB::rollBack();
-        }
+
         }
         return response()->json([
         'message' => "$j records successfully uploaded"
