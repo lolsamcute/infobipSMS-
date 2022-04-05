@@ -1,6 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+use GuzzleHttp\Client;
+use Infobip\Api\SendSmsApi;
+use Infobip\Configuration;
+use Infobip\Model\SmsAdvancedTextualRequest;
+use Infobip\Model\SmsDestination;
+use Infobip\Model\SmsTextualMessage;
 
 class MessageController extends Controller
 {
@@ -14,60 +23,100 @@ class MessageController extends Controller
         //
     }
 
-    public function upload(Request $request)
+    function sendSmsFrom()
     {
+        $location = 'uploads';
+        $filename = "message.csv";
+        $file = public_path($location . "/" . $filename); // Public Path Location where Message.csv is Located.
 
-
-        $location = 'uploads'; //Created an "uploads" folder for that
-        // This is th location path of the message.csv file
-        if ($filepath = public_path($location . "/" . "message.csv")) {
-
-        // Reading file
-        $file = fopen($filepath, "r");
-       // $importData_arr = array();
-        $importData_arr = [
-            ['infosms','8109844175','',''],
-            ['infosms','8109844175','',''],
-            ['infosms','8109844175','',''],
-            ['infosms','8109844175','',''],
-            ['infosms','8109844175','',''],
-            ['infosms','8109844175','',''],
-            ['infosms','8109844175','',''],
-            ['infosms','8109844175','',''],
-            ['infosms','8109844175','',''],
-            ['infosms','8109844175','',''],
-        ]; // Read through the file and store the contents as an array
-
-        $i = 0;
-        //Read the contents of the uploaded file
-        while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
-        $num = count($filedata);
-        // Skip first row (Remove below comment if you want to skip the first row)
-        if ($i == 0) {
-        $i++;
-        continue;
+        if (! file_exists($file) ) {
+            throw new \RuntimeException("The given file [$file] does not exist."); // Throw File Error if Not Exist
         }
-        for ($c = 0; $c < $num; $c++) {
-        $importData_arr[$i][] = $filedata[$c];
-        $importData_arr[$i][2] = Str::uuid();
 
-        }
-        $i++;
-        }
-        fclose($file); //Close after reading
-        $j = 0;
-        foreach ($importData_arr as $importData) {
-        $name = $importData[1]; //Get user names
-        $email = $importData[3]; //Get the user emails
-        $j++;
+        // open the file for Reading .
+        $stream = fopen($file, 'r');
+        $rows = [];
+        $index = 0;
 
+        // get table rows from the csv file
+        while( ($row = fgetcsv($stream, 1000, ',')) !== false) {
+            if ($index === 0) {
+                $index++;
+                // we skip the first row because
+                // we are assuming it is the column header
+                continue;
+            }
+
+            // generate random id and add to the 3rd column
+            $row[2] = Str::orderedUuid();
+            $rows[] = $row;
+
+            $index++;
         }
-        return response()->json([
-        'message' => "$j records successfully uploaded"
-        ]);
-        } else {
-        //no file was uploaded
-        throw new \Exception('No file was uploaded', Response::HTTP_BAD_REQUEST);
+
+        fclose($stream);
+
+        // make concurrent request calls to api endpoint
+        // to send sms
+
+        $SENDER = "InfoSMS";
+        $RECIPIENT = '234'.substr("08109844175", 1);
+        $MESSAGE_TEXT = "Congratulations! Message Sent";
+
+        foreach($rows as &$row) {
+
+        $key = $row[1]; // we used the random generated id as key
+
+        $BASE_URL = env('API_BASE_URL');
+        $API_KEY = env('API_KEY');
+
+        $configuration = (new Configuration())
+        ->setHost($BASE_URL)
+        ->setApiKeyPrefix('Authorization', 'App')
+        ->setApiKey('Authorization', $API_KEY);
+
+        $client = new Client();
+
+        $sendSmsApi = new SendSMSApi($client, $configuration);
+        $destination = (new SmsDestination())->setTo($RECIPIENT);
+        $message = (new SmsTextualMessage())
+            ->setFrom($SENDER)
+            ->setText($MESSAGE_TEXT)
+            ->setDestinations([$destination]);
+
+        $request = (new SmsAdvancedTextualRequest())->setMessages([$message]);
+
+        try {
+            $smsResponse = $sendSmsApi->sendSmsMessage($request);
+            // update the description row with response from Infobip API
+            // $key = $row[2];
+
+
+
+            // echo ("Response body: " . $smsResponse);
+        } catch (Throwable $apiException) {
+            echo("HTTP Code: " . $apiException->getCode() . "\n");
+
+            echo ("Response body: " . $apiException->getResponseBody() . "\n");
         }
+     }
+
+        // override file with update csv using Write Method
+        $stream = fopen($file, 'w');
+
+        // add csv column headers
+        fputcsv($stream, [ 'SenderId', 'MSISDN', 'MessageId', 'Description' ]);
+
+        // update the file with updated csv rows
+        foreach ($rows as $row) {
+            fputcsv($stream, $row);
+        }
+
+        fclose($stream);
+
+        return view('successful');
     }
+
+
+
 }

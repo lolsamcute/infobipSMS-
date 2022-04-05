@@ -8,7 +8,8 @@
         "php": "^7.3|^8.0",
         "dusterio/lumen-passport": "^0.3.5",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/lumen-framework": "^9.0"
+        "laravel/lumen-framework": "^9.0",
+        "infobip/infobip-api-php-client": "3.2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -20,7 +21,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helper/helpers.php"
+         ]
     },
     "autoload-dev": {
         "psr-4": {

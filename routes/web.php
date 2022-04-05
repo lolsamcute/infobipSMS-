@@ -17,6 +17,5 @@ $router->get('/', function () use ($router) {
     return "Hi";
 });
 
-$router->group(['prefix' => 'infobip/api'], function ($router) {
+$router->get('result', 'MessageController@sendSmsFrom'); //sendSmsFromMessag.csv
 
-});

@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => 'ad6c35765224e8d842555726b591e464a22c0756',
         'name' => 'laravel/lumen',
         'dev' => true,
     ),
@@ -418,6 +418,15 @@
             'reference' => '7d4520e7540d61b32e97962dac50501a0736600a',
             'dev_requirement' => false,
         ),
+        'infobip/infobip-api-php-client' => array(
+            'pretty_version' => '3.2.0',
+            'version' => '3.2.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../infobip/infobip-api-php-client',
+            'aliases' => array(),
+            'reference' => '076be729a28aa77fb37620ba6fa4af06df973d96',
+            'dev_requirement' => false,
+        ),
         'kodova/hamcrest-php' => array(
             'dev_requirement' => true,
             'replaced' => array(
@@ -434,12 +443,12 @@
             'dev_requirement' => false,
         ),
         'laravel/lumen' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => 'ad6c35765224e8d842555726b591e464a22c0756',
             'dev_requirement' => false,
         ),
         'laravel/lumen-framework' => array(
@@ -831,12 +840,12 @@
             ),
         ),
         'psr/simple-cache' => array(
-            'pretty_version' => '1.0.1',
-            'version' => '1.0.1.0',
+            'pretty_version' => '3.0.0',
+            'version' => '3.0.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/simple-cache',
             'aliases' => array(),
-            'reference' => '408d5eafb83c57f6365a3ca330ff23aa4a5fa39b',
+            'reference' => '764e0b3939f5ca87cb904f570ef9be2d78a07865',
             'dev_requirement' => false,
         ),
         'psr/simple-cache-implementation' => array(
