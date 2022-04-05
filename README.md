@@ -26,7 +26,7 @@ The Lumen framework is open-sourced software licensed under the [MIT license](ht
 
 To Start the project
 
-- Download the file
+- Clone the file to download
 - Composer install / update 
 - Goto the Message Controller, change the RECIPIENT to your number 
 - Start your server
