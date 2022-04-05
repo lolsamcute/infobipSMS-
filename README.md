@@ -22,3 +22,16 @@ If you discover a security vulnerability within Lumen, please send an e-mail to 
 ## License
 
 The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+To Start the project
+
+- Download the file
+- Composer install / update 
+- Goto the Message Controller, change the RECIPIENT to your number 
+- Start your server
+- Then to test the project (http://localhost:8000/result)
+
+Thanks 
+
+If you have any problem to start the project please do let me know
