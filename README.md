@@ -28,7 +28,7 @@ To Start the project
 
 - Clone the file to download
 - Composer install / update 
-- Goto the Message Controller, change the RECIPIENT to your number 
+- Goto the Message Controller, change the RECIPIENT to your number to receive SMS Message using Infobip Endpoint
 - Start your server
 - Then to test the project (http://localhost:8000/result)
 
